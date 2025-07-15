@@ -9,6 +9,7 @@ const Profile = () => {
   useEffect(() => {
     const number = localStorage.getItem("number");
     const email = localStorage.getItem("loggedEmail");
+     console.log("📦 number from localStorage:", number);
 
     if (!number || !email) return;
 
