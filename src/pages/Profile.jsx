@@ -15,7 +15,7 @@ const Profile = () => {
     setProfile({ number, email });
 
     axios
-      .get(`${process.env.MYSQL_URL}/history?number=${number}`)
+      .get(`${process.env.REACT_APP_API_URL}/history?number=${number}`)
       .then((res) => groupByDate(res.data))
       .catch((err) => console.log(err));
   }, []);
