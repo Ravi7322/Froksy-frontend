@@ -46,14 +46,14 @@ const PaymentPage = () => {
   };
 
   const submitOrder = async () => {
-    await axios.post(`${process.env.MYSQL_URL}/details`, {
+    await axios.post(`${process.env.REACT_APP_API_URL}/details`, {
       orderId,
       fullname: form.fullname,
       number: form.number,
       address: `${form.address}, ${form.city}, ${form.zip}`,
     });
 
-    await axios.post(`${process.env.MYSQL_URL}/order`, {
+    await axios.post(`${process.env.REACT_APP_API_URL}/order`, {
       orderId,
       number: form.number,
       items,

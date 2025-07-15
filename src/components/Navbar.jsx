@@ -56,7 +56,7 @@ const Navbar = ({ setIsLoggedIn ,setSearchText }) => {
     }
 
     axios
-      .post(`${process.env.MYSQL_URL}/login`, { email, password, number })
+      .post(`${process.env.REACT_APP_API_URL}/login`, { email, password, number })
       .then((res) => {
         toast.success("✅ Registered successfully!");
       })
@@ -78,7 +78,7 @@ const Navbar = ({ setIsLoggedIn ,setSearchText }) => {
 
 
     axios
-      .get(`${process.env.MYSQL_URL}/users`)
+      .get(`${process.env.REACT_APP_API_URL}/users`)
       .then((res) => {
         const user = res.data.find((user) => user.email === email1);
 
