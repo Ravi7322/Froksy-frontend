@@ -1,0 +1,62 @@
+.splash-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  background: radial-gradient(circle at center, #ffe8d6, #f8d49d);
+  width: 100%;
+  height: 100%;
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  animation: fadeOut 1s ease-in-out 2.8s forwards;
+}
+
+.forksy-bounce {
+  font-size: 3.5rem;
+  font-weight: bold;
+  font-family: "Poppins", sans-serif;
+  color: #c94c4c;
+  display: flex;
+  align-items: center;
+  animation: bounceIn 2s ease;
+}
+
+.forksy-text1 {
+  margin-left: 10px;
+  animation: popFade 2s ease-in-out;
+}
+
+@keyframes bounceIn {
+  0% {
+    transform: scale(0.5) translateY(-200px);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.2) translateY(20px);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes popFade {
+  0% {
+    opacity: 0;
+    letter-spacing: 20px;
+    transform: scale(0.6);
+  }
+  100% {
+    opacity: 1;
+    letter-spacing: 2px;
+    transform: scale(1);
+  }
+}
+
+@keyframes fadeOut {
+  to {
+    opacity: 0;
+    visibility: hidden;
+  }
+}

@@ -1,0 +1,71 @@
+/* Fix navbar to top */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 999;
+  background-color: white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Navbar inner layout */
+.nav-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.logo1 {
+  width: 52px;
+  margin-left: 20px;
+}
+
+.ser {
+  margin-left: 40px;
+  display: flex;
+  align-items: center;
+}
+
+.menu1 {
+  display: flex;
+  gap: 20px;
+  margin-left: auto;
+  align-items: center;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap');
+
+.forksy-text {
+  font-family: 'Fredoka One', cursive;
+  font-size: 48px;
+  background: linear-gradient(90deg, #ff5722, #ff9800);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+  letter-spacing: 2px;
+  animation: pop-in 0.8s ease-out forwards;
+  margin-left: 205px;
+  user-select: none;
+  align-items: center;
+}
+
+.menu1 a {
+  text-decoration: none;
+}
+
+.menu1 a:hover {
+  color: #ff5722;
+}
+
+.menu1 .active {
+  color: black;
+  font-weight: 600;
+}
+
+.loc {
+  margin-left: 20px;
+  padding-top: 10px;
+}

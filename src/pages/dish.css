@@ -1,0 +1,14 @@
+.imginfo{
+    display: flex;
+    align-content: center;
+    justify-content: center;
+    width: 50%;
+    height: 100%;
+    padding-top: 90px;
+}
+.proinfo{
+     align-content: center;
+    justify-content: center;
+    
+    width: 50%;
+}
