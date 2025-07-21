@@ -6,16 +6,18 @@ import { useSelector } from "react-redux";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 
-const Navbar = ({ setIsLoggedIn ,setSearchText }) => {
+const Navbar = ({ setIsLoggedIn, setSearchText }) => {
   const totalPrice = useSelector((state) => state.cart.totalPrice);
-  
-  const [email, setEmail] = useState();
-  const [email1, setEmail1] = useState();
-  const [password, setPassword] = useState();
-  const [confirmPassword, setConfirmPassword] = useState();
-  const [number, setNumber] = useState();
-  const [password1, setPassword1] = useState();
+
+  const [signupEmail, setSignupEmail] = useState("");
+  const [signupPassword, setSignupPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [signupNumber, setSignupNumber] = useState("");
+
+  const [loginEmail, setLoginEmail] = useState("");
+  const [loginPassword, setLoginPassword] = useState("");
   const [loginError, setLoginError] = useState("");
+
   const [input, setInput] = useState("");
   const [loggedEmail, setLoggedEmail] = useState("");
 
@@ -25,80 +27,89 @@ const Navbar = ({ setIsLoggedIn ,setSearchText }) => {
       setLoggedEmail(storedEmail);
     }
   }, []);
+
   const isValidEmail = (email) =>
     /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
-  // ✅ Phone number must be exactly 10 digits
   const isValidNumber = (num) =>
     /^[0-9]{10}$/.test(num);
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-     if (!email || !password || !number || !confirmPassword) {
+    if (!signupEmail || !signupPassword || !signupNumber || !confirmPassword) {
       return toast.error("⚠️ Please fill all fields.");
     }
 
-    if (!isValidEmail(email)) {
+    if (!isValidEmail(signupEmail)) {
       return toast.error("📧 Enter a valid email address.");
     }
 
-    if (!isValidNumber(number)) {
+    if (!isValidNumber(signupNumber)) {
       return toast.error("📞 Enter a 10-digit mobile number.");
     }
 
-    if (password.length < 6) {
+    if (signupPassword.length < 6) {
       return toast.error("🔒 Password must be at least 6 characters.");
     }
 
-    if (password !== confirmPassword) {
+    if (signupPassword !== confirmPassword) {
       return toast.error("❌ Passwords do not match.");
     }
 
     axios
-      .post(`${process.env.REACT_APP_API_URL}/login`, { email, password, number })
-      .then((res) => {
+      .post(`${process.env.REACT_APP_API_URL}/login`, {
+        email: signupEmail,
+        password: signupPassword,
+        number: signupNumber,
+      })
+      .then(() => {
         toast.success("✅ Registered successfully!");
+        setSignupEmail("");
+        setSignupPassword("");
+        setConfirmPassword("");
+        setSignupNumber("");
       })
       .catch((err) => {
         console.error(err);
-        toast.error("Email is already exits.");
+        toast.error("❌ Email is already registered.");
       });
   };
 
   const login = (e) => {
     e.preventDefault();
-     if (!email1 || !password1) {
+
+    if (!loginEmail || !loginPassword) {
       return toast.error("⚠️ Email and password required.");
     }
 
-    if (!isValidEmail(email1)) {
+    if (!isValidEmail(loginEmail)) {
       return toast.error("📧 Enter a valid email.");
     }
-
 
     axios
       .get(`${process.env.REACT_APP_API_URL}/users`)
       .then((res) => {
-        const user = res.data.find((user) => user.email === email1);
+        const user = res.data.find((u) => u.email === loginEmail);
 
         if (!user) {
-          setLoginError("Email is not registered.");
-        } else if ((user.password ?? "").trim() === (password1 ?? "").trim()) {
+          setLoginError("⚠️ Email is not registered.");
+        } else if ((user.password ?? "").trim() === (loginPassword ?? "").trim()) {
           setLoginError("");
           setLoggedEmail(user.email);
-          localStorage.setItem("number", user.number);
           setIsLoggedIn(true);
 
-          // ✅ Save details
           localStorage.setItem("loggedEmail", user.email);
           localStorage.setItem("user_id", user.id);
-          localStorage.setItem("number", user.number); // ✅ Save number
+          localStorage.setItem("number", user.number);
 
           document.querySelector("#offcanvasScrolling .btn-close")?.click();
-          toast.success("Login successful!");
+          toast.success("✅ Login successful!");
+
+          setLoginEmail("");
+          setLoginPassword("");
         } else {
-          setLoginError("Incorrect password.");
+          setLoginError("❌ Incorrect password.");
         }
       })
       .catch((err) => {
@@ -109,11 +120,8 @@ const Navbar = ({ setIsLoggedIn ,setSearchText }) => {
 
   const handleSearch = (e) => {
     e.preventDefault();
-    
     setSearchText(input);
-    
   };
- 
 
   return (
     <div>
@@ -130,7 +138,7 @@ const Navbar = ({ setIsLoggedIn ,setSearchText }) => {
               placeholder="Search"
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              
+              required
             />
             <button className="btn btn-outline-success" type="submit">
               Search
@@ -144,25 +152,20 @@ const Navbar = ({ setIsLoggedIn ,setSearchText }) => {
           <h1 className="forksy-text">Forksy</h1>
 
           <div className="menu1 d-flex gap-3">
-            <NavLink to='/'>Home</NavLink>
-            <NavLink to='/offers'>Offers 🎁</NavLink>
-            <NavLink to='/about'>About</NavLink>
+            <NavLink to="/">Home</NavLink>
+            <NavLink to="/offers">Offers 🎁</NavLink>
+            <NavLink to="/about">About</NavLink>
 
             {loggedEmail ? (
-              <>
-                <NavLink to="/profile">
-                  <button
-  type="button"
-  className="btn btn-link p-0 m-0 text-success fw-bold"
-  style={{ textDecoration: "none" }}
->
-  {loggedEmail}
-</button>
-
-                   
-                </NavLink>
-              
-              </>
+              <NavLink to="/profile">
+                <button
+                  type="button"
+                  className="btn btn-link p-0 m-0 text-success fw-bold"
+                  style={{ textDecoration: "none" }}
+                >
+                  {loggedEmail}
+                </button>
+              </NavLink>
             ) : (
               <NavLink
                 to="#"
@@ -207,7 +210,9 @@ const Navbar = ({ setIsLoggedIn ,setSearchText }) => {
                 className="form-control"
                 id="login-email"
                 placeholder="Enter your email"
-                onChange={(e) => setEmail1(e.target.value)}
+                value={loginEmail}
+                onChange={(e) => setLoginEmail(e.target.value)}
+                required
               />
             </div>
 
@@ -220,7 +225,9 @@ const Navbar = ({ setIsLoggedIn ,setSearchText }) => {
                 className="form-control"
                 id="login-password"
                 placeholder="Enter your password"
-                onChange={(e) => setPassword1(e.target.value)}
+                value={loginPassword}
+                onChange={(e) => setLoginPassword(e.target.value)}
+                required
               />
               <div style={{ color: "red", fontSize: "14px", marginTop: "5px" }}>
                 {loginError}
@@ -270,7 +277,9 @@ const Navbar = ({ setIsLoggedIn ,setSearchText }) => {
                 className="form-control"
                 id="number"
                 placeholder="Enter your Number"
-                onChange={(e) => setNumber(e.target.value)}
+                value={signupNumber}
+                onChange={(e) => setSignupNumber(e.target.value)}
+                required
               />
             </div>
             <div>
@@ -282,7 +291,9 @@ const Navbar = ({ setIsLoggedIn ,setSearchText }) => {
                 className="form-control"
                 id="email"
                 placeholder="Enter your email"
-                onChange={(e) => setEmail(e.target.value)}
+                value={signupEmail}
+                onChange={(e) => setSignupEmail(e.target.value)}
+                required
               />
             </div>
 
@@ -295,7 +306,9 @@ const Navbar = ({ setIsLoggedIn ,setSearchText }) => {
                 className="form-control"
                 id="password"
                 placeholder="Enter your password"
-                onChange={(e) => setPassword(e.target.value)}
+                value={signupPassword}
+                onChange={(e) => setSignupPassword(e.target.value)}
+                required
               />
             </div>
 
@@ -308,7 +321,9 @@ const Navbar = ({ setIsLoggedIn ,setSearchText }) => {
                 className="form-control"
                 id="confirm-password"
                 placeholder="Confirm your password"
+                value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
+                required
               />
             </div>
 
